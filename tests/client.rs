@@ -2,6 +2,7 @@ use std::env;
 use twilio::{Client, OutboundMessage};
 
 #[tokio::test]
+#[cfg(feature="sms")]
 async fn send_sms() {
     dotenv::dotenv().ok();
 

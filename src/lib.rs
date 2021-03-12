@@ -3,13 +3,15 @@ mod message;
 pub mod twiml;
 mod webhook;
 
+#[cfg(feature="voice")]
 pub use call::{Call, OutboundCall};
+#[cfg(feature="sms")]
+pub use message::{Message, OutboundMessage};
 use headers::authorization::{Authorization, Basic};
 use headers::{ContentType, HeaderMapExt};
 use hyper::client::connect::HttpConnector;
 use hyper::{Body, Method, StatusCode};
 use hyper_tls::HttpsConnector;
-pub use message::{Message, OutboundMessage};
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::fmt::{self, Display, Formatter};

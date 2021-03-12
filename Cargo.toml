@@ -9,6 +9,14 @@ authors = ["Neil LoBracco <neil.lobracco@gmail.com>", "Lance Carlson <lancecarls
 keywords = ["twilio","rust"]
 edition = "2018"
 
+[features]
+#default = ["voice", "sms"]
+
+# Programmable Voice
+voice = []
+# Programmable SMS
+sms = []
+
 [dependencies]
 base64 = "0.12"
 headers = "0.3.2"
