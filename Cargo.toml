@@ -9,6 +9,13 @@ authors = ["Neil LoBracco <neil.lobracco@gmail.com>", "Lance Carlson <lancecarls
 keywords = ["twilio","rust"]
 edition = "2018"
 
+[features]
+default = ["voice", "sms", "webhook"]
+voice = []
+sms = []
+webhook = []
+
+
 [dependencies]
 base64 = "0.12"
 mime = "0.3"

@@ -1,3 +1,4 @@
+#!cfg[feature = "webhook"]
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Error, Request, Response};
 

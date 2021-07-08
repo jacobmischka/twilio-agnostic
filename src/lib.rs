@@ -1,4 +1,6 @@
+#[cfg(feature = "voice")]
 mod call;
+#[cfg(feature = "sms")]
 mod message;
 
 #[cfg(feature = "webhook")]
@@ -6,7 +8,11 @@ pub mod twiml;
 #[cfg(feature = "webhook")]
 mod webhook;
 
+#[cfg(feature = "voice")]
 pub use call::{Call, OutboundCall};
+#[cfg(feature = "sms")]
+pub use message::{Message, OutboundMessage};
+
 use http::{
     header::{HeaderValue, CONTENT_LENGTH, CONTENT_TYPE},
     Method, StatusCode,
@@ -16,7 +22,6 @@ use isahc::{
     config::Configurable,
     AsyncBody, AsyncReadResponseExt,
 };
-pub use message::{Message, OutboundMessage};
 
 use std::{
     collections::BTreeMap,
