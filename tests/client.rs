@@ -1,3 +1,5 @@
+#![cfg(feature = "sms")]
+
 use std::env;
 use twilio::{Client, OutboundMessage};
 
