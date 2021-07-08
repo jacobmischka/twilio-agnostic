@@ -1,10 +1,13 @@
-use crate::{Client, FromMap, TwilioError};
-use crypto::hmac::Hmac;
-use crypto::mac::{Mac, MacResult};
-use crypto::sha1::Sha1;
-use headers::{HeaderMapExt, Host};
-use hyper::{Body, Method, Request};
+use crypto::{
+    hmac::Hmac,
+    mac::{Mac, MacResult},
+    sha1::Sha1,
+};
+use http::{header::HOST, Method};
+
 use std::collections::BTreeMap;
+
+use crate::{Client, FromMap, TwilioError};
 
 fn get_args(path: &str) -> BTreeMap<String, String> {
     let url_segments: Vec<&str> = path.split('?').collect();
@@ -22,7 +25,7 @@ fn args_from_urlencoded(enc: &[u8]) -> BTreeMap<String, String> {
 impl Client {
     pub async fn parse_request<T: FromMap>(
         &self,
-        req: Request<Body>,
+        req: http::Request<Vec<u8>>,
     ) -> Result<Box<T>, TwilioError> {
         let sig = req
             .headers()
@@ -31,12 +34,12 @@ impl Client {
             .and_then(|d| base64::decode(d.as_bytes()).map_err(|_| TwilioError::BadRequest))?;
 
         let (parts, body) = req.into_parts();
-        let body = hyper::body::to_bytes(body)
-            .await
-            .map_err(TwilioError::NetworkError)?;
-        let host = match parts.headers.typed_get::<Host>() {
+
+        let body = body.as_slice();
+
+        let host = match parts.headers.get(HOST) {
             None => return Err(TwilioError::BadRequest),
-            Some(h) => h.hostname().to_string(),
+            Some(h) => h.to_str().map_err(|_| TwilioError::ParsingError)?,
         };
         let request_path = match parts.uri.path() {
             "*" => return Err(TwilioError::BadRequest),
