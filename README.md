@@ -1,7 +1,7 @@
 twilio-agnostic
 =========
 
-`twilio-agnostic` as a `twilio-rs` fork that uses [isahc](https://crates.io/crates/isahc) to be async runtime agnostic. It is a Rust library for integrating with Twilio that tries to present an idiomatic Rust interface for making requests to the Twilio API, and validating, parsing, and replying to webhooks that Twilio makes to your server.
+`twilio-agnostic` is a [`twilio-rs`](https://crates.io/crates/twilio) fork that uses [isahc](https://crates.io/crates/isahc) to be async runtime-agnostic. It is a Rust library for integrating with Twilio that tries to present an idiomatic Rust interface for making requests to the Twilio API, and validating, parsing, and replying to webhooks that Twilio makes to your server.
 
 First, you'll need to create a Twilio client:
 
@@ -29,7 +29,7 @@ use hyper::{Body, Request, Response, Error};
 async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Error> {
     let client = ...;
 
-	// Convert hyper body to bytes
+    // Convert hyper body to bytes
     let (parts, body) = req.into_parts();
     let body_bytes = hyper::body::to_bytes(body).await?;
     let req = Request::from_parts(parts, body_bytes.as_ref());
@@ -44,7 +44,7 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Error> {
     })
     .await;
 
-	// Convert string body back to hyper
+    // Convert string body back to hyper
     Ok(response.map(|b| b.into()))
 }
 ```
@@ -57,7 +57,7 @@ use hyper::{Body, Request, Response, Error};
 async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Error> {
     let client = ...;
 
-	// Convert hyper body to bytes
+    // Convert hyper body to bytes
     let (parts, body) = req.into_parts();
     let body_bytes = hyper::body::to_bytes(body).await?;
     let req = Request::from_parts(parts, body_bytes.as_ref());
@@ -73,7 +73,7 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, Error> {
     })
     .await;
 
-	// Convert string body back to hyper
+    // Convert string body back to hyper
     Ok(response.map(|b| b.into()))
 }
 ```
