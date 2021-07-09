@@ -1,13 +1,19 @@
 use hyper::service::{make_service_fn, service_fn};
-use hyper::{Body, Request, Response};
-use std::convert::Infallible;
+use hyper::{Body, Error, Request, Response};
+
 use std::net::SocketAddr;
+
 use twilio::twiml::{Say, Twiml, Voice};
 
-async fn handle(req: Request<Body>) -> Result<Response<Body>, Infallible> {
+async fn handle(req: Request<Body>) -> Result<Response<Body>, Error> {
     let app_id = "<app-id>";
     let auth_token = "<auth-token>";
     let client = twilio::Client::new(app_id, auth_token);
+
+    // Convert hyper body to bytes
+    let (parts, body) = req.into_parts();
+    let body_bytes = hyper::body::to_bytes(body).await?;
+    let req = Request::from_parts(parts, body_bytes.as_ref());
 
     let cloned_uri = req.uri().clone();
     println!("Got a request for: {}", cloned_uri);
@@ -40,13 +46,13 @@ async fn handle(req: Request<Body>) -> Result<Response<Body>, Infallible> {
         _ => panic!("Hit an unknown path."),
     };
 
-    Ok(response)
+    Ok(response.map(|b| b.into()))
 }
 
 #[tokio::main]
 async fn main() {
     let addr: SocketAddr = "127.0.0.1:3000".parse().unwrap();
-    let make_service = make_service_fn(|_| async { Ok::<_, Infallible>(service_fn(handle)) });
+    let make_service = make_service_fn(|_| async { Ok::<_, Error>(service_fn(handle)) });
     let server = hyper::Server::bind(&addr).serve(make_service);
     println!("Listening on http://{}", addr);
     server.await.unwrap();

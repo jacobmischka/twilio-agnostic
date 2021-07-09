@@ -25,7 +25,7 @@ fn args_from_urlencoded(enc: &[u8]) -> BTreeMap<String, String> {
 impl Client {
     pub async fn parse_request<T: FromMap>(
         &self,
-        req: http::Request<Vec<u8>>,
+        req: http::Request<&[u8]>,
     ) -> Result<Box<T>, TwilioError> {
         let sig = req
             .headers()
@@ -34,8 +34,6 @@ impl Client {
             .and_then(|d| base64::decode(d.as_bytes()).map_err(|_| TwilioError::BadRequest))?;
 
         let (parts, body) = req.into_parts();
-
-        let body = body.as_slice();
 
         let host = match parts.headers.get(HOST) {
             None => return Err(TwilioError::BadRequest),

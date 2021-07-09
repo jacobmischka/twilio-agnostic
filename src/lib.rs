@@ -1,6 +1,9 @@
 mod call;
 mod message;
+
+#[cfg(feature = "webhook")]
 pub mod twiml;
+#[cfg(feature = "webhook")]
 mod webhook;
 
 pub use call::{Call, OutboundCall};
@@ -129,9 +132,10 @@ impl Client {
         }
     }
 
+    #[cfg(feature = "webhook")]
     pub async fn respond_to_webhook<T: FromMap, F>(
         &self,
-        req: http::Request<Vec<u8>>,
+        req: http::Request<&[u8]>,
         mut logic: F,
     ) -> http::Response<String>
     where
