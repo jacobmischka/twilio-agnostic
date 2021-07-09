@@ -1,7 +1,7 @@
 #![cfg(feature = "sms")]
 
 use std::env;
-use twilio::{Client, OutboundMessage};
+use twilio_agnostic::{Client, OutboundMessage};
 
 #[tokio::test]
 async fn send_sms() {
