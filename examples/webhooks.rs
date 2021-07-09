@@ -1,15 +1,16 @@
 #!cfg[feature = "webhook"]
+
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{Body, Error, Request, Response};
 
 use std::net::SocketAddr;
 
-use twilio::twiml::{Say, Twiml, Voice};
+use twilio_agnostic::twiml::{Say, Twiml, Voice};
 
 async fn handle(req: Request<Body>) -> Result<Response<Body>, Error> {
     let app_id = "<app-id>";
     let auth_token = "<auth-token>";
-    let client = twilio::Client::new(app_id, auth_token);
+    let client = twilio_agnostic::Client::new(app_id, auth_token);
 
     // Convert hyper body to bytes
     let (parts, body) = req.into_parts();
@@ -22,9 +23,9 @@ async fn handle(req: Request<Body>) -> Result<Response<Body>, Error> {
     let response = match cloned_uri.path() {
         "/message" => {
             client
-                .respond_to_webhook(req, |msg: twilio::Message| {
+                .respond_to_webhook(req, |msg: twilio_agnostic::Message| {
                     let mut t = Twiml::new();
-                    t.add(&twilio::twiml::Message {
+                    t.add(&twilio_agnostic::twiml::Message {
                         txt: format!("You told me: '{}'", msg.body.unwrap()),
                     });
                     t
@@ -33,7 +34,7 @@ async fn handle(req: Request<Body>) -> Result<Response<Body>, Error> {
         }
         "/call" => {
             client
-                .respond_to_webhook(req, |_: twilio::Call| {
+                .respond_to_webhook(req, |_: twilio_agnostic::Call| {
                     let mut t = Twiml::new();
                     t.add(&Say {
                         txt: "Thanks for using twilio-rs. Bye!".to_string(),
@@ -47,6 +48,7 @@ async fn handle(req: Request<Body>) -> Result<Response<Body>, Error> {
         _ => panic!("Hit an unknown path."),
     };
 
+    // Convert string body back to hyper
     Ok(response.map(|b| b.into()))
 }
 

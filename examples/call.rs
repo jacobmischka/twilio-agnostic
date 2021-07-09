@@ -1,4 +1,4 @@
-use twilio::{Client, OutboundCall};
+use twilio_agnostic::{Client, OutboundCall};
 
 #[tokio::main]
 async fn main() {
