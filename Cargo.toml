@@ -1,11 +1,11 @@
 [package]
-name = "twilio"
+name = "twilio-agnostic"
 version = "1.0.0"
-description = "Rust bindings for the Twilio API"
+description = "Async runtime-agnostic rust bindings for the Twilio API"
 readme = "README.md"
-repository = "https://github.com/neil-lobracco/twilio-rs"
+repository = "https://github.com/jacobmischka/twilio-agnostic"
 license = "MIT"
-authors = ["Neil LoBracco <neil.lobracco@gmail.com>", "Lance Carlson <lancecarlson@gmail.com>"]
+authors = ["Neil LoBracco <neil.lobracco@gmail.com>", "Lance Carlson <lancecarlson@gmail.com>", "Jacob Mischka <jacob@mischka.me>"]
 keywords = ["twilio","rust"]
 edition = "2018"
 

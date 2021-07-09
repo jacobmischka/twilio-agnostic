@@ -1,9 +1,7 @@
-twilio-rs
+twilio-agnostic
 =========
-[![](http://meritbadge.herokuapp.com/twilio)](https://crates.io/crates/twilio)
 
-
-`twilio-rs` is a Rust library for integrating with Twilio. It tries to present an idiomatic Rust interface for making requests to the Twilio API, and validating, parsing, and replying to webhooks that Twilio makes to your server.
+`twilio-agnostic` as a `twilio-rs` fork that uses [isahc](https://crates.io/crates/isahc) to be async runtime agnostic. It is a Rust library for integrating with Twilio that tries to present an idiomatic Rust interface for making requests to the Twilio API, and validating, parsing, and replying to webhooks that Twilio makes to your server.
 
 First, you'll need to create a Twilio client:
 
